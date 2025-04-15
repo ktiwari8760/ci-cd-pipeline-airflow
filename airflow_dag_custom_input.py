@@ -5,10 +5,10 @@ from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitJobO
 from airflow.operators.bash import BashOperator
 from airflow.models.param import Param
 
-REGION = ""
-PROJECT_ID = ""
-CLUSTER_NAME = ""
-PYSPARK_CODE_PATH = ""
+REGION = "us-central1"
+PROJECT_ID = "inbound-bee-455509-t1"
+CLUSTER_NAME = "cluster-386d"
+PYSPARK_CODE_PATH = "gs://us-central1-airflow-project-986178bb-bucket/pyspark-code/spark-code-orders.py"
 
 default_args = {
     'owner':'airflow',

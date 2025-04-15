@@ -11,11 +11,11 @@ import argparse
 
 def main(date):
     spark = SparkSession.builder.appName("Read the file according to date").getOrCreate()
-    inputpath = f"input/orders_{date}"
-    outputpath = f"output/orders_{date}"
+    inputpath = f"gs://us-central1-airflow-project-986178bb-bucket/input_files/orders_{date}.csv"
+    outputpath = f"gs://us-central1-airflow-project-986178bb-bucket/output_files/orders_{date}.csv"
     orders_data = spark.read.format("csv").option("inferSchema" , "true").option("header" , "true").load(inputpath)
     filtered_data = orders_data.filter(orders_data.order_status == "Completed")
-    filtered_data.write.format("csv").mode("overwrite").option("header" , "true").load()
+    filtered_data.write.format("csv").mode("overwrite").option("header" , "true").save(outputpath)
     spark.stop()
 
 if __name__ == '__main__':
