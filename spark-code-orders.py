@@ -8,11 +8,17 @@
 from pyspark.sql import SparkSession
 from datetime import datetime , timedelta
 import argparse
+import json
+
+with open('config.json' , 'r') as file:
+    config = json.load(file)
+
+directory = config['directory']
 
 def main(date):
     spark = SparkSession.builder.appName("Read the file according to date").getOrCreate()
-    inputpath = f"gs://us-central1-airflow-project-986178bb-bucket/input_files/orders_{date}.csv"
-    outputpath = f"gs://us-central1-airflow-project-986178bb-bucket/output_files/orders_{date}.csv"
+    inputpath = f"{directory}/input_files/orders_{date}.csv"
+    outputpath = f"{directory}/output_files/orders_{date}.csv"
     orders_data = spark.read.format("csv").option("inferSchema" , "true").option("header" , "true").load(inputpath)
     filtered_data = orders_data.filter(orders_data.order_status == "Completed")
     filtered_data.write.format("csv").mode("overwrite").option("header" , "true").save(outputpath)

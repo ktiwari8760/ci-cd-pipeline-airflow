@@ -4,11 +4,15 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitJobOperator
 from airflow.operators.bash import BashOperator
 from airflow.models.param import Param
+import json
 
-REGION = "us-central1"
-PROJECT_ID = "inbound-bee-455509-t1"
-CLUSTER_NAME = "cluster-386d"
-PYSPARK_CODE_PATH = "gs://us-central1-airflow-project-986178bb-bucket/pyspark-code/spark-code-orders.py"
+with open('config.json' , r) as file:
+    config = json.load(file)
+
+REGION = config['region']
+PROJECT_ID = config['project_id']
+CLUSTER_NAME = config['cluster_name']
+PYSPARK_CODE_PATH = config['pyspark_code_path']
 
 default_args = {
     'owner':'airflow',
